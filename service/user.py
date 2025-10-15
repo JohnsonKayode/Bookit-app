@@ -3,7 +3,8 @@ from uuid import UUID
 from fastapi import APIRouter, HTTPException
 from sqlalchemy.orm import Session
 from schema.user import UserCreate, UserUpdate, User, UserResponse
-from model import UserT
+from model import UserT, BookingT
+from service.admin import adminservice
 import uuid
 # from database import get_db, user_db, admin_db, Base
 
@@ -57,10 +58,23 @@ class UserService:
         }
     
     @staticmethod
-    def delete_user(user_id: UUID, user_db: Session):
-        user = userservice.get_user_by_id(user_db, user_id)
+    def delete_user(user_id: UUID, admin_id: UUID, user_db: Session):
+        user = userservice.get_user_by_id(user_id, user_db)
         if not user:
             raise HTTPException(status_code=404, detail="User not found")
+        
+        admin = adminservice.get_admin_by_id(admin_id, user_db)
+        if not admin:
+            raise HTTPException(status_code=404, detail="Admin not found")
+        if admin.role != "admin":
+            raise HTTPException(status_code=401, detail="Not an admin")
+        
+        user_db.query(BookingT).filter(BookingT.user_id == str(user_id)).delete()
+        user_db.commit()
+
+        # user_db.query(UserT).filter(UserT.id == str(user_id)).delete()
+        # user_db.commit()
+        
         user_db.delete(user)
         user_db.commit()
         return {"detail": "User deleted successfully"}

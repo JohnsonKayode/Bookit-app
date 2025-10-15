@@ -34,7 +34,7 @@ def update_user(user_id: UUID, user_update: UserUpdate, db: Session = Depends(ge
     updated_user = userservice.update_user(user_id, user_update, db)
     return updated_user
 
-@user_Router.delete("/users/{user_id}")
-def delete_user(user_id: UUID, db:  Session = Depends(get_db)):
-    result = userservice.delete_user(user_id, db)
+@user_Router.delete("/users/{user_id}/{admin_id}")
+def delete_user(user_id: UUID, admin_id: UUID, db: Session = Depends(get_db)):
+    result = userservice.delete_user(user_id, admin_id, db)
     return result
