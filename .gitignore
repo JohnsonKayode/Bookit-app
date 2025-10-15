@@ -1,0 +1,36 @@
+# Byte-compiled files
+__pycache__/
+*.py[cod]
+
+# Virtual environment
+venv/
+ENV/
+env/
+
+# Environment variables
+*.env
+
+# Logs
+*.log
+logs/
+
+# Cache files
+*.cache
+*.coverage
+*.pytest_cache/
+
+# Database files
+*.sqlite3
+*.db
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+
+# macOS system files
+.DS_Store
+
+# IDE settings
+.vscode/
+.idea/
