@@ -4,7 +4,7 @@ from fastapi import APIRouter, HTTPException
 from sqlalchemy.orm import Session
 from schema.admin import AdminCreate, AdminUpdate, Admin, AdminBase
 from model import UserT
-from database import get_db, user_db
+# from database import get_db, user_db
 
 
 class AdminService:

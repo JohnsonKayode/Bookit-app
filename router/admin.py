@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from schema.admin import AdminUpdate, Admin, AdminBase, AdminCreate
 from service.admin import adminservice
 from uuid import UUID
-from database import get_db, Base, engine, user_db
+from database import get_db, Base, engine
 
 Base.metadata.create_all(bind=engine)
 
