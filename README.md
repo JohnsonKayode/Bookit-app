@@ -87,3 +87,11 @@ Deliverables
 Git repo link (public).
 Production URL + docs URL.
 README with setup, env, and decisions.
+
+
+
+for the alembic migrationn,
+
+alembic upgrade head
+
+alembic revision --autogenerate -m "Sync database schema"

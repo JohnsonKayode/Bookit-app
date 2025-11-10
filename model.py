@@ -19,7 +19,7 @@ class ServiceT(Base):
     __tablename__ = "service"
 
     id = Column(String, primary_key=True, index=True)
-    title = Column(String, nullable=False)
+    title = Column(String, nullable=False, index=True)
     description = Column(String, nullable=False)
     price = Column(Numeric(10, 2), nullable=False)
     duration_minutes = Column(String, nullable=False)
