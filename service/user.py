@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 from schema.user import UserCreate, UserUpdate, User, UserResponse
 from model import UserT, BookingT
 from service.admin import adminservice
+from auth  import pwd_context
 import uuid
 # from database import get_db, user_db, admin_db, Base
 
@@ -29,8 +30,11 @@ class UserService:
         return user
     
     @staticmethod
-    def create_user(user: UserCreate, user_db: Session) -> UserResponse:
-        details = UserT(id = str(uuid.uuid4()), **user.model_dump())
+    def create_user(user: UserCreate, user_db: Session):
+        old_user  = user_db.query(UserT).filter(UserT.email  == user.email).first()
+        if old_user:
+            raise HTTPException(status_code=400, detail="Email already registered")
+        details = UserT(id = str(uuid.uuid4()), **user.model_dump(exclude="password_hash"), password_hash = pwd_context.hash(user.password_hash))
         details.created_at = datetime.datetime.utcnow()  # Added created_at field
         user_db.add(details)
         user_db.commit()

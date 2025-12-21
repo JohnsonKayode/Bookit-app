@@ -7,7 +7,7 @@ from database import get_db, Base, engine
 
 Base.metadata.create_all(bind=engine)
 
-admin_Router = APIRouter()
+admin_Router = APIRouter(tags=["Admins"])
 
 
 @admin_Router.get("/admins")

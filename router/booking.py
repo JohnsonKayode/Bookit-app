@@ -1,17 +1,19 @@
 from service.booking import BookingServices
 from fastapi import APIRouter, Depends, HTTPException
 from schema.booking import BookingCreate, BookingUpdate, Booking
+
 from sqlalchemy.orm import Session
 from uuid import UUID
 from database import get_db, engine, Base
+from service.auths import authsrvc
 
 Base.metadata.create_all(bind=engine)
 
-booking_router = APIRouter()
+booking_router = APIRouter(tags=["Booking"])
 
 
 @booking_router.post("/bookings/{user_id}/{service_id}")
-def create_booking(booking_create: BookingCreate, user_id: UUID, service_id: UUID, db: Session = Depends(get_db)):
+def create_booking(booking_create: BookingCreate, user_id: UUID, service_id: UUID, db: Session = Depends(get_db), current_user: list = Depends(authsrvc.get_current_user)):
     new_booking = BookingServices.create_booking(booking_create, user_id, service_id, db)
     return new_booking
 

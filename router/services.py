@@ -9,7 +9,7 @@ from service.admin import adminservice
 
 Base.metadata.create_all(bind=engine)
 
-services_router = APIRouter()
+services_router = APIRouter(tags=["Services"])
 
 
 @services_router.post("/services/{admin_id}")

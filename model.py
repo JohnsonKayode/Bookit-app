@@ -1,4 +1,5 @@
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Numeric, Boolean
+from sqlalchemy.orm import relationship
 import datetime
 from database import Base
 
@@ -12,7 +13,7 @@ class UserT(Base):
     email = Column(String, unique=False, nullable=False)
     password_hash = Column(String, nullable=False)
     role = Column(String, nullable=False)
-    created_at = Column(DateTime, default=datetime.datetime.utcnow)
+    created_at = Column(DateTime(timezone=True), default=datetime.datetime.utcnow)
 
 
 class ServiceT(Base):
@@ -24,8 +25,10 @@ class ServiceT(Base):
     price = Column(Numeric(10, 2), nullable=False)
     duration_minutes = Column(String, nullable=False)
     is_active = Column(String, default=True)
-    created_at = Column(DateTime, default=datetime.datetime.utcnow)
+    created_at = Column(DateTime(timezone=True), default=datetime.datetime.utcnow)
     admin_id = Column(String, ForeignKey("user.id"), nullable=False)
+
+    bookings = relationship("BookingT", back_populates="service")
 
 class BookingT(Base):
     __tablename__ = "booking"
@@ -36,4 +39,6 @@ class BookingT(Base):
     start_time = Column(String, nullable=False)
     end_time = Column(String, nullable=False)
     status = Column(String, default="confirmed", nullable=False)
-    created_at = Column(DateTime, default=datetime.datetime.utcnow, nullable=False)
+    created_at = Column(DateTime(timezone=True), default=datetime.datetime.utcnow, nullable=False)
+
+    service = relationship("ServiceT", back_populates="bookings")

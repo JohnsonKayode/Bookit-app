@@ -36,4 +36,11 @@ class UserResponse(BaseModel):
     class Config:
         from_attributes = True
         orm_mode = True
+
+class UserLogin(BaseModel):
+    email: EmailStr = Field(..., description="User email address")
+    password_hash: str = Field(..., description="User password")
+
+    class Config:
+        orm_mode = True
     
