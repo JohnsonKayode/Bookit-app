@@ -15,6 +15,7 @@ class UserT(Base):
     role = Column(String, nullable=False)
     created_at = Column(DateTime(timezone=True), default=datetime.datetime.utcnow)
 
+    services = relationship("BookingT", back_populates="users")
 
 class ServiceT(Base):
     __tablename__ = "service"
@@ -26,7 +27,7 @@ class ServiceT(Base):
     duration_minutes = Column(String, nullable=False)
     is_active = Column(String, default=True)
     created_at = Column(DateTime(timezone=True), default=datetime.datetime.utcnow)
-    admin_id = Column(String, ForeignKey("user.id"), nullable=False)
+    admin_id = Column(String, ForeignKey("user.id", ondelete="CASCADE"), nullable=False)
 
     bookings = relationship("BookingT", back_populates="service")
 
@@ -34,7 +35,7 @@ class BookingT(Base):
     __tablename__ = "booking"
 
     id = Column(String, primary_key=True, index=True)
-    user_id = Column(String, ForeignKey("user.id"), nullable=False)
+    user_id = Column(String, ForeignKey("user.id", ondelete="CASCADE"), nullable=False)
     service_id = Column(String, ForeignKey("service.id"), nullable=False)
     start_time = Column(String, nullable=False)
     end_time = Column(String, nullable=False)
@@ -42,3 +43,4 @@ class BookingT(Base):
     created_at = Column(DateTime(timezone=True), default=datetime.datetime.utcnow, nullable=False)
 
     service = relationship("ServiceT", back_populates="bookings")
+    users = relationship("UserT", back_populates="services")

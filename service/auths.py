@@ -83,4 +83,17 @@ class AuthService:
         except JWTError:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Could not validate credentials2")
 
+    def get_current_user_id(token: str = Depends(auth_bearer), db: Session = Depends(get_db)):
+        try:
+            payload = jwt.decode(token, secret_key, algorithms=[algorithm])
+            user_id: str = payload.get("id")
+            if user_id is None:
+                raise HTTPException(status_code=401, detail="Invalid authentication credentials")
+            user = db.query(UserT).filter(UserT.id == user_id).first()
+            if user is None:
+                raise HTTPException(status_code=401, detail="User no longer exists")
+            return user_id
+        except JWTError:
+            raise HTTPException(status_code=401, detail="Invalid authentication credentials")
+        
 authsrvc = AuthService()

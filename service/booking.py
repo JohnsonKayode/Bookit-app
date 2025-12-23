@@ -1,12 +1,14 @@
 # from database import booking_db, service_db, user_db
 from schema.booking import BookingBase, BookingCreate, BookingUpdate, Booking
 from service.user import userservice
+from service.auths import authsrvc
 from service.service import ServiceServices
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
 from uuid import UUID
+from router.auth import get_current_user
 import uuid
-from model import BookingT
+from model import BookingT, UserT
 import datetime
 
 
@@ -52,8 +54,14 @@ class BookingService:
         user = userservice.get_user_by_id(user_id, db)
         if not user:
             raise ValueError("user not found")
-        
         bookings = db.query(BookingT).filter(BookingT.user_id == str(user_id)).all()
+        return bookings
+    
+    @staticmethod
+    def get_my_bookings(user_id: UUID, db: Session):
+        bookings = db.query(BookingT).filter(BookingT.user_id == str(user_id)).all()
+        if bookings is None:
+            raise HTTPException(status_code=404, detail="No bookings found for this user")
         return bookings
 
     @staticmethod
