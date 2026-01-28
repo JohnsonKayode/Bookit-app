@@ -28,16 +28,6 @@ class AuthService:
         encoded_jwt = jwt.encode(encode, secret_key, algorithm=algorithm)
         return encoded_jwt
     
-    # @staticmethod
-    # def user_login(user: UserLogin, db: Session = Depends(get_db)):
-    #     details = authsrvc.authenticate(user, db)
-    #     if not details:
-    #         raise HTTPException(status_code=400, detail="Invalid Credentials")
-    #     expiration = timedelta(minutes=access_expire)
-    #     access_token = authsrvc.create_token(details.email, details.id, expires_delta = expiration)
-    #     return {"access_token": access_token, "token_type": "bearer"}
-    
-
     @staticmethod
     def user_login(user: UserLogin, db: Session = Depends(get_db)):
         details = authsrvc.authenticate(user, db)
@@ -49,19 +39,6 @@ class AuthService:
         access_token = authsrvc.create_token(details.email, details.id, expires_delta=expiration)
         
         return {"access_token": access_token, "token_type": "bearer"}
-
-
-    # def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
-    #     user = authsrvc.authenticate(UserLogin(email=form_data.username, password=form_data.password), db)
-    #     if not user:
-    #         raise HTTPException(
-    #             status_code=status.HTTP_401_UNAUTHORIZED,
-    #             detail="Incorrect email or password",
-    #             headers={"WWW-Authenticate": "Bearer"},
-    #             )
-    #     access_token_expires = timedelta(minutes=access_expire)
-    #     access_token = authsrvc.create_token(user.email, user.id, expires_delta=access_token_expires)
-    #     return {"access_token": access_token, "token_type": "bearer"}
 
     @staticmethod
     def get_current_user(token: str = Depends(auth_bearer), db: Session = Depends(get_db)):

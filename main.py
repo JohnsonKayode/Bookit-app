@@ -17,4 +17,4 @@ include_router = app.include_router(auth_router)
 
 @app.get("/")
 def main_root():
-    return {"message": "Welcome to Bookit app!"}
+    return {"message" : "Welcome to Bookit app!"}

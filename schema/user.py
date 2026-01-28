@@ -20,7 +20,7 @@ class UserCreate(UserBase):
 class UserUpdate(BaseModel):
     name: str = None
     email: str = None
-    password: str = None
+    password_hash: str = None
     class Config:
         orm_mode = True
 
